@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:12:14 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/13 02:33:57 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/21 17:52:36 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	child(char **argv, int *pipe_fd, char **env)
 {
 	int	fd;
+	int	dup_fd;
+	int	dup_pipe;
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
@@ -22,35 +24,41 @@ void	child(char **argv, int *pipe_fd, char **env)
 		ft_putstr_fd("missing file 1 !\n", 1);
 		exit(0);
 	}
-	if (dup2(fd, 0) < 0)
+	dup_fd = dup2(fd, 0);
+	if (dup_fd < 0)
 		exit_error(4);
-	if (dup2(pipe_fd[1], 1) < 0)
+	dup_pipe = dup2(pipe_fd[1], 1);
+	if (dup_pipe < 0)
 		exit_error(4);
 	close(pipe_fd[0]);
 	close(fd);
-	exec(argv[2], env);
+	executable(argv[2], env);
 }
 
 void	parent(char **argv, int *pipe_fd, char **env)
 {
 	int	fd;
+	int	dup_fd;
+	int	dup_pipe;
 
-	fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	fd = open(argv[4], O_WRONLY | O_CREAT);
 	if (fd < 0)
 	{
 		ft_putstr_fd("missing file 2 !\n", 1);
 		exit(1);
 	}
-	if (dup2(fd, 1) < 0)
+	dup_fd = dup2(fd, 1);
+	if (dup < 0)
 		exit_error(5);
-	if (dup2(pipe_fd[0], 0) < 0)
+	dup_pipe = dup2(pipe_fd[0], 0);
+	if (dup_pipe < 0)
 		exit_error(5);
 	close(pipe_fd[1]);
 	close(fd);
-	exec(argv[3], env);
+	executable(argv[3], env);
 }
 
-void	exec(char *cmd, char **env)
+void	executable(char *cmd, char **env)
 {
 	char	**split_cmd;
 	char	*path;
@@ -70,7 +78,7 @@ void	exec(char *cmd, char **env)
 	}
 }
 
-char	*my_getenv(char *name, char **env)
+char	*get_env(char *name, char **env)
 {
 	int		i;
 	int		j;
@@ -99,26 +107,25 @@ char	*get_path(char *cmd, char **env)
 	int		i;
 	char	*exec;
 	char	*path_part;
-	char	**allpath;
+	char	**path;
 
 	i = -1;
-	allpath = ft_split(my_getenv("PATH", env), ':');
-	if (!allpath)
+	*env = get_env("PATH", env);
+	path = ft_split(*env, ':');
+	if (!path)
 		exit_error(1);
-	while (allpath[++i])
+	while (path[++i])
 	{
-		path_part = ft_strjoin(allpath[i], "/");
+		path_part = ft_strjoin(path[i], "/");
 		exec = ft_strjoin(path_part, cmd);
 		free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
-			ft_free_tab(allpath);
+			ft_free_tab(path);
 			return (exec);
 		}
 		free(exec);
 	}
-	ft_free_tab(allpath);
-	ft_putstr_fd("pipex: command not found: ", 2);
-	ft_putendl_fd(cmd, 2);
-	exit(1);
+	all_path_not_found(path, cmd);
+	exit(-1);
 }

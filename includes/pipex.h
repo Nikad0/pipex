@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:23:19 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/13 01:43:16 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/21 17:48:48 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,16 @@
 # include "../libft/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <unistd.h>
 
-int		exit_error(int n_exit);
-void	ft_free_tab(char **tab);
+
+
+void	parent(char **av, int *p_fd, char **env);
 void	child(char **av, int *p_fd, char **env);
-void	exec(char *cmd, char **env);
+void	executable(char *cmd, char **env);
 char	*my_getenv(char *name, char **env);
 char	*get_path(char *cmd, char **env);
-void	parent(char **av, int *p_fd, char **env);
+void	all_path_not_found(char **allpath, char *cmd);
+void	ft_free_tab(char **tab);
+int		exit_error(int n_exit);
 
 #endif
