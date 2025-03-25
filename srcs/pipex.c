@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:12:14 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/21 17:52:36 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 18:52:21 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,19 @@
 void	child(char **argv, int *pipe_fd, char **env)
 {
 	int	fd;
-	int	dup_fd;
-	int	dup_pipe;
 
 	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
+	if (fd == -1)
 	{
-		ft_putstr_fd("missing file 1 !\n", 1);
+		exit_error("missing file 1 !\n");
 		exit(0);
 	}
-	dup_fd = dup2(fd, 0);
-	if (dup_fd < 0)
-		exit_error(4);
-	dup_pipe = dup2(pipe_fd[1], 1);
-	if (dup_pipe < 0)
-		exit_error(4);
+	if (dup2(fd, 0) == -1)
+		exit_error("dup error !\n");
+	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		exit_error("dup error !\n");
 	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	close(fd);
 	executable(argv[2], env);
 }
@@ -38,22 +35,19 @@ void	child(char **argv, int *pipe_fd, char **env)
 void	parent(char **argv, int *pipe_fd, char **env)
 {
 	int	fd;
-	int	dup_fd;
-	int	dup_pipe;
 
 	fd = open(argv[4], O_WRONLY | O_CREAT);
-	if (fd < 0)
+	if (fd == -1)
 	{
-		ft_putstr_fd("missing file 2 !\n", 1);
+		exit_error("missing file 2 !\n");
 		exit(1);
 	}
-	dup_fd = dup2(fd, 1);
-	if (dup < 0)
-		exit_error(5);
-	dup_pipe = dup2(pipe_fd[0], 0);
-	if (dup_pipe < 0)
-		exit_error(5);
+	if (dup2(fd, 1) == -1)
+		exit_error("dup error !\n");
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+		exit_error("dup error !\n");
 	close(pipe_fd[1]);
+	close(pipe_fd[0]);
 	close(fd);
 	executable(argv[3], env);
 }
@@ -66,8 +60,13 @@ void	executable(char *cmd, char **env)
 	if (!*cmd)
 		exit(1);
 	split_cmd = ft_split(cmd, ' ');
+	if (split_cmd == NULL)
+	{
+		exit_error("split erro !\n");
+		return ;
+	}
 	if (!split_cmd || !split_cmd[0])
-		exit_error(1);
+		exit_error("split error !\n");
 	path = get_path(split_cmd[0], env);
 	if (execve(path, split_cmd, env) == -1)
 	{
@@ -111,9 +110,14 @@ char	*get_path(char *cmd, char **env)
 
 	i = -1;
 	*env = get_env("PATH", env);
+	if (env == NULL)
+	{
+		free(*env);
+		exit_error("env error !\n");
+	}
 	path = ft_split(*env, ':');
 	if (!path)
-		exit_error(1);
+		exit_error("path error !\n");
 	while (path[++i])
 	{
 		path_part = ft_strjoin(path[i], "/");
