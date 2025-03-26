@@ -18,8 +18,9 @@ SRC_DIR = srcs
 
 BUILD_DIR = .build
 
-SRC_FILES = main.c \
-            pipex.c\
+SRC_FILES = main.c    \
+            pipex.c   \
+			getters.c \
 			
 INCLUDES = includes
 

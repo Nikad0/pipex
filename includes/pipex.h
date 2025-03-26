@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:23:19 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/25 16:25:56 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 14:41:15 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 # include "../libft/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
-void	parent(char **av, int *p_fd, char **env);
-void	child(char **av, int *p_fd, char **env);
+void	child_1(char **av, int *pipe_fd, char **env);
+void	child_2(char **av, int *pipe_fd, char **env);
 void	executable(char *cmd, char **env);
 char	*my_getenv(char *name, char **env);
 char	*get_path(char *cmd, char **env);

@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:29:07 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/25 16:25:42 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 14:49:20 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,7 @@
 
 int	exit_error(char *exit_msg)
 {
-	while (exit_msg)
-		write(1, exit_msg++, 1);
-	// if (n_exit == 1)
-	// {
-	// 	ft_putstr_fd("incorrect number of argument !\n", 2);
-	// 	exit(1);
-	// }
-	// if (n_exit == 2)
-	// 	perror("pipe");
-	// if (n_exit == 3)
-	// 	perror("fork");
-	// if (n_exit == 4)
-	// 	perror("dup2 child");
-	// if (n_exit == 5)
-	// 	perror("dup2 parent");
+	write(2, exit_msg, ft_strlen(exit_msg));
 	return (EXIT_FAILURE);
 }
 
@@ -52,17 +38,28 @@ void	all_path_not_found(char **allpath, char *cmd)
 int	main(int argc, char **argv, char **env)
 {
 	int		pipe_fd[2];
-	pid_t	pid;
+	int		status;
+	pid_t	pid_1;
+	pid_t	pid_2;
 
+	status = 0;
 	if (argc != 5)
 		exit_error("wrong number of argument given !\n");
-	pipe(pipe_fd);
-	if (*pipe_fd == -1)
+	if (pipe(pipe_fd) == -1)
 		exit_error("pipe error !\n");
-	pid = fork();
-	if (pid == -1)
+	pid_1 = fork();
+	if (pid_1 == -1)
 		exit_error("fork error !\n");
-	if (!pid)
-		child(argv, pipe_fd, env);
-	parent(argv, pipe_fd, env);
+	if (pid_1 == 0)
+		child_1(argv, pipe_fd, env);
+	pid_2 = fork();
+	if (pid_2 == -1)
+		exit_error("fork error !\n");
+	if (pid_2 == 0)
+		child_2(argv, pipe_fd, env);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	waitpid(pid_1, &status, 0);
+	waitpid(pid_2, &status, 0);
+	return (status);
 }
