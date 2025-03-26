@@ -6,16 +6,16 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:29:07 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 14:49:20 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 16:56:57 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	exit_error(char *exit_msg)
+void	exit_error(char *exit_msg)
 {
 	write(2, exit_msg, ft_strlen(exit_msg));
-	return (EXIT_FAILURE);
+	exit(-1);
 }
 
 void	ft_free_tab(char **tab)

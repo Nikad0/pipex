@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:23:19 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 16:52:49 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 16:55:39 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 // main.c //
 void	ft_free_tab(char **tab);
-int		exit_error(char *exit_msg);
+void		exit_error(char *exit_msg);
 void	all_path_not_found(char **allpath, char *cmd);
 
 // pipex.c //

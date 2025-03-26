@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:12:14 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 16:14:43 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 16:58:52 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ void	child_1(char **av, int *pipe_fd, char **env)
 
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)
-	{
-		exit_error("missing file 1 !\n");
-		exit(0);
-	}
+		exit_error("error file 1 !\n");
 	if (dup2(fd, STDIN_FILENO) == -1)
 		exit_error("dup error !\n");
 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
@@ -39,7 +36,7 @@ void	child_2(char **av, int *pipe_fd, char **env)
 	fd = open(av[4], O_WRONLY | O_CREAT);
 	if (fd == -1)
 	{
-		exit_error("missing file 2 !\n");
+		exit_error("error file 2 !\n");
 		exit(1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
