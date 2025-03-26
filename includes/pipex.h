@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:23:19 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 14:41:15 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 16:52:49 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+// main.c //
+void	ft_free_tab(char **tab);
+int		exit_error(char *exit_msg);
+void	all_path_not_found(char **allpath, char *cmd);
+
+// pipex.c //
 void	child_1(char **av, int *pipe_fd, char **env);
 void	child_2(char **av, int *pipe_fd, char **env);
 void	executable(char *cmd, char **env);
+
+// getters.c //
 char	*my_getenv(char *name, char **env);
 char	*get_path(char *cmd, char **env);
-void	all_path_not_found(char **allpath, char *cmd);
-void	ft_free_tab(char **tab);
-int		exit_error(char *exit_msg);
 
 #endif
