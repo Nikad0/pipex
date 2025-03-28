@@ -6,11 +6,18 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:51:27 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 16:48:38 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/28 16:38:32 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	exec_error(char **split_cmd, char *part_path)
+{
+	ft_free_tab(split_cmd);
+	free(part_path);
+	exit_error("exec error !\n");
+}
 
 char	*get_env(char *name, char **env)
 {
@@ -36,56 +43,56 @@ char	*get_env(char *name, char **env)
 	return (NULL);
 }
 
-char	*get_exec_path(char **path, char *cmd, char *path_part, char *exec)
+char	*get_exec_path(char **path, char **split_cmd, char *part_path,
+		char *exec)
 {
 	int	i;
 
 	i = -1;
 	while (path[++i])
 	{
-		path_part = ft_strjoin(path[i], "/");
-		if (path_part == NULL)
+		part_path = ft_strjoin(path[i], "/");
+		if (part_path == NULL)
 		{
 			exit_error("path error !\n");
 			return (NULL);
 		}
-		exec = ft_strjoin(path_part, cmd);
+		exec = ft_strjoin(part_path, split_cmd[0]);
 		if (exec == NULL)
 		{
-			exit_error("exec error !\n");
-			free(path_part);
+			exec_error(split_cmd, part_path);
 			return (NULL);
 		}
-		free(path_part);
+		free(part_path);
 		if (access(exec, F_OK | X_OK) == 0)
 			return (exec);
 		free(exec);
 	}
-	all_path_not_found(path, cmd);
+	all_path_not_found(path, split_cmd);
 	exit(-1);
 }
 
-char	*get_path(char *cmd, char **env)
+char	*get_path(char **split_cmd, char **env)
 {
 	char	**path;
+	char	*part_path;
+	char	*part_env;
 	char	*exec;
-	char	*path_part;
 
-	path_part = NULL;
+	part_path = NULL;
 	exec = NULL;
-	*env = get_env("PATH", env);
-	if (*env == NULL)
-	{
-		exit_error("env error !\n");
+	part_env = get_env("PATH", env);
+	if (part_env == NULL)
 		return (NULL);
-	}
-	path = ft_split(*env, ':');
-	if (!path)
+	path = ft_split(part_env, ':');
+	if (!path && !path[0])
 	{
-		exit_error("path error !\n");
-		return (NULL);
+		free(part_env);
+		ft_free_tab(path);
+		ft_free_tab(split_cmd);
+		exit_error("getting_path error !\n");
 	}
-	exec = get_exec_path(path, cmd, path_part, exec);
+	exec = get_exec_path(path, split_cmd, part_path, exec);
 	ft_free_tab(path);
 	return (exec);
 }

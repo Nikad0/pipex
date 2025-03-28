@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:23:19 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 17:02:46 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/28 16:32:10 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // main.c //
 void	ft_free_tab(char **tab);
 void	exit_error(char *exit_msg);
-void	all_path_not_found(char **allpath, char *cmd);
+void	all_path_not_found(char **allpath, char **split_cmd);
 
 // pipex.c //
 void	child_1(char **av, int *pipe_fd, char **env);
@@ -32,6 +32,6 @@ void	executable(char *cmd, char **env);
 
 // getters.c //
 char	*my_getenv(char *name, char **env);
-char	*get_path(char *cmd, char **env);
+char	*get_path(char **split_cmd, char **env);
 
 #endif

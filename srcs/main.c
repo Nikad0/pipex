@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:29:07 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/26 16:56:57 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/03/28 16:32:07 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,22 @@ void	ft_free_tab(char **tab)
 {
 	size_t	i;
 
-	i = -1;
-	while (tab[++i])
-		free(tab[i]);
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
+		free(tab[i++]);
 	free(tab);
 }
 
-void	all_path_not_found(char **allpath, char *cmd)
+void	all_path_not_found(char **path, char **split_cmd)
 {
-	ft_free_tab(allpath);
-	ft_putstr_fd("pipex: command not found: ", 2);
-	ft_putendl_fd(cmd, 2);
+	ft_putstr_fd("error : command not found : ", 2);
+	ft_putstr_fd(split_cmd[0], 2);
+	write(2, "\n", 1);
+	ft_free_tab(split_cmd);
+	ft_free_tab(path);
+	exit(-1);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -44,7 +49,7 @@ int	main(int argc, char **argv, char **env)
 
 	status = 0;
 	if (argc != 5)
-		exit_error("wrong number of argument given !\n");
+		exit_error("error : wrong number of argument given !\n");
 	if (pipe(pipe_fd) == -1)
 		exit_error("pipe error !\n");
 	pid_1 = fork();
