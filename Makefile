@@ -2,17 +2,11 @@ NAME =     pipex
 
 CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES) -I$(LIBFT_DIR) -g3
 
-OPTI_FLAGS = -Ofast -march=native -flto -fno-signed-zeros -funroll-loops
-
-DFLAGS = -MMD -MP
-
 LIBFT_DIR = libft
 
 LIBFT = libft.a
 
-FLAG_RL = -L/usr/local/lib -I/usr/local/include -lreadline
-
-MLX = libmlx.a
+FLAG_RL = -L/usr/local/lib -I/usr/local/include
 
 SRC_DIR = srcs
 
