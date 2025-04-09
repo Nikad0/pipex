@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getters.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nikado <nikado@student.42.fr>              +#+  +:+       +#+        */
+/*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:51:27 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/31 16:06:50 by nikado           ###   ########.fr       */
+/*   Updated: 2025/04/09 18:45:29 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,15 @@ char	*get_exec_path(char **path, char **split_cmd, char *part_path,
 		part_path = ft_strjoin(path[i], "/");
 		if (part_path == NULL)
 		{
-			exit_error("path error !\n");
 			return (NULL);
+			exit_error("path error !\n");
 		}
 		exec = ft_strjoin(part_path, split_cmd[0]);
 		if (exec == NULL)
 		{
-			exec_error(split_cmd, part_path);
+			free(part_path);
 			return (NULL);
+			exec_error(split_cmd, part_path);
 		}
 		free(part_path);
 		if (access(exec, F_OK | X_OK) == 0)
@@ -85,9 +86,8 @@ char	*get_path(char **split_cmd, char **env)
 	if (part_env == NULL)
 		return (NULL);
 	path = ft_split(part_env, ':');
-	if (!path && !path[0])
+	if (!path)
 	{
-		free(part_env);
 		ft_free_tab(path);
 		ft_free_tab(split_cmd);
 		exit_error("getting_path error !\n");

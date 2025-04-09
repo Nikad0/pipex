@@ -1,6 +1,6 @@
-NAME =     pipex
+NAME =  pipex
 
-CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES) -I$(LIBFT_DIR) -g3
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES) -I$(LIBFT_DIR)
 
 LIBFT_DIR = libft
 
