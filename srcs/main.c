@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:29:07 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/28 16:32:07 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/04/09 13:42:43 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,23 @@ void	ft_free_tab(char **tab)
 
 void	all_path_not_found(char **path, char **split_cmd)
 {
-	ft_putstr_fd("error : command not found : ", 2);
+	ft_putstr_fd("Error : command not found : ", 2);
 	ft_putstr_fd(split_cmd[0], 2);
 	write(2, "\n", 1);
 	ft_free_tab(split_cmd);
 	ft_free_tab(path);
 	exit(-1);
+}
+
+void	fork_error(int *fd)
+{
+	if (fd)
+	{
+		close(fd[1]);
+		close(fd[0]);
+	}
+	exit_error("fork error !\n");
+	return ;
 }
 
 int	main(int argc, char **argv, char **env)
@@ -54,12 +65,12 @@ int	main(int argc, char **argv, char **env)
 		exit_error("pipe error !\n");
 	pid_1 = fork();
 	if (pid_1 == -1)
-		exit_error("fork error !\n");
+		fork_error(pipe_fd);
 	if (pid_1 == 0)
 		child_1(argv, pipe_fd, env);
 	pid_2 = fork();
 	if (pid_2 == -1)
-		exit_error("fork error !\n");
+		fork_error(pipe_fd);
 	if (pid_2 == 0)
 		child_2(argv, pipe_fd, env);
 	close(pipe_fd[0]);

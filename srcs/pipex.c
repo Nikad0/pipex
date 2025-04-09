@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:12:14 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/03/28 16:28:39 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/04/09 13:36:07 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,8 @@ void	executable(char *cmd, char **env)
 	if (execve(path, split_cmd, env) == -1)
 	{
 		ft_putstr_fd("pipex: command not found : 2", 2);
-		ft_putstr_fd(split_cmd[0], 2);
-		write(2, "\n", 1);
 		ft_free_tab(split_cmd);
+		free(path);
 		exit(1);
 	}
 }
