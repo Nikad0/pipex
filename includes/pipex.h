@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:23:19 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/04/09 13:42:49 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/04/09 14:40:23 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 
 // main.c //
+void	close_error(int *fd);
 void	ft_free_tab(char **tab);
 void	exit_error(char *exit_msg);
 void	all_path_not_found(char **allpath, char **split_cmd);

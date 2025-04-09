@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:29:07 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/04/09 13:42:43 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/04/09 14:41:02 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ void	all_path_not_found(char **path, char **split_cmd)
 	exit(-1);
 }
 
-void	fork_error(int *fd)
+void	close_error(int *fd)
 {
 	if (fd)
 	{
 		close(fd[1]);
 		close(fd[0]);
 	}
-	exit_error("fork error !\n");
 	return ;
 }
 
@@ -65,12 +64,12 @@ int	main(int argc, char **argv, char **env)
 		exit_error("pipe error !\n");
 	pid_1 = fork();
 	if (pid_1 == -1)
-		fork_error(pipe_fd);
+		close_error(pipe_fd);
 	if (pid_1 == 0)
 		child_1(argv, pipe_fd, env);
 	pid_2 = fork();
 	if (pid_2 == -1)
-		fork_error(pipe_fd);
+		close_error(pipe_fd);
 	if (pid_2 == 0)
 		child_2(argv, pipe_fd, env);
 	close(pipe_fd[0]);
