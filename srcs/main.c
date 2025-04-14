@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:29:07 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/04/09 18:26:02 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/04/14 15:29:41 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	exit_error(char *exit_msg)
 {
 	write(2, exit_msg, ft_strlen(exit_msg));
-	exit(-1);
+	exit(127);
 }
 
 void	ft_free_tab(char **tab)
@@ -37,7 +37,7 @@ void	all_path_not_found(char **path, char **split_cmd)
 	write(2, "\n", 1);
 	ft_free_tab(split_cmd);
 	ft_free_tab(path);
-	exit(-1);
+	exit(127);
 }
 
 void	close_error(int *fd)
@@ -53,11 +53,9 @@ void	close_error(int *fd)
 int	main(int argc, char **argv, char **env)
 {
 	int		pipe_fd[2];
-	int		status;
 	pid_t	pid_1;
 	pid_t	pid_2;
 
-	status = 0;
 	if (argc != 5)
 		exit_error("error : wrong number of argument given !\n");
 	if (pipe(pipe_fd) == -1)
@@ -74,7 +72,5 @@ int	main(int argc, char **argv, char **env)
 		child_2(argv, pipe_fd, env);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	waitpid(pid_1, &status, 0);
-	waitpid(pid_2, &status, 0);
-	return (status);
+	return (wait_child(pid_1, pid_2));
 }

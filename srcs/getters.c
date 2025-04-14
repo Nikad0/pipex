@@ -6,7 +6,7 @@
 /*   By: erbuffet <erbuffet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:51:27 by erbuffet          #+#    #+#             */
-/*   Updated: 2025/04/14 13:55:32 by erbuffet         ###   ########lyon.fr   */
+/*   Updated: 2025/04/14 15:28:13 by erbuffet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*get_exec_path(char **path, char **split_cmd, char *part_path,
 		free(exec);
 	}
 	all_path_not_found(path, split_cmd);
-	exit(-1);
+	exit(0);
 }
 
 char	*get_path(char **split_cmd, char **env)
